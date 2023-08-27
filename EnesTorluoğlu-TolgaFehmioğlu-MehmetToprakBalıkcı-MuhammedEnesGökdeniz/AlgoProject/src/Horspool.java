@@ -8,11 +8,11 @@ public class Horspool {
 
     public static void main(String[] args) {
         String text = "10010101010011001";
-        String pattern = "101";
+        String pattern = "0";
 
 
         long start = System.currentTimeMillis();
-        applyHorspool(Tables.constructBadTable(pattern),pattern,text);
+        applyHorspool(Tables.constructBadTable(pattern), pattern, text);
         long end = System.currentTimeMillis();
         long timeOfHorspool = end - start;
         System.out.println("HorsPool time: " + timeOfHorspool);
@@ -22,12 +22,13 @@ public class Horspool {
 
     public static void applyHorspool(HashMap<Character, Integer> badTable, String key, String text) {
         long start = System.nanoTime();
-        char lastC = key.charAt(key.length() - 1);
+        char lastC = key.charAt(key.length() - 1);   // 10010101010011001
+        //                                              1
         int length = key.length();
         int index = length - 1;
-        int lastIndex = index;
-        if (length> text.length()){
-            numberOfComparison=0;
+        int lastIndex;
+        if (length > text.length()) {
+            numberOfComparison = 0;
             return;
         }
 
@@ -35,7 +36,7 @@ public class Horspool {
             if (lastC == text.charAt(index)) {
                 lastIndex = index;
                 numberOfComparison++;
-                boolean check = checkFullMatch(index, key, text);
+                checkFullMatch(index, key, text);
                 index += badTable.get(text.charAt(lastIndex));
 
             } else {
@@ -49,13 +50,17 @@ public class Horspool {
         } while (index <= text.length() - 1);
 
         long end = System.nanoTime();
-        runningTime= (long) ((end-start)/Math.pow(10,6));
+        runningTime = (long) ((end - start) / Math.pow(10, 6));
     }
 
-    private static boolean checkFullMatch(int index, String key, String text) {
+    private static void checkFullMatch(int index, String key, String text) {
         boolean check = true;
+        if (key.length() == 1) {
+            numberOfOccurence++;
+            return;
+        }
         int k = key.length() - 2;
-        for (int i = index -1; i >= 0; i--) {
+        for (int i = index - 1; i >= 0; i--) {
             if (key.charAt(k) != text.charAt(i)) {
                 check = false;
                 numberOfComparison++;
@@ -70,7 +75,7 @@ public class Horspool {
             numberOfOccurence++;
 
         }
-        return check;
+
     }
 
 
